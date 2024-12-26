@@ -1,0 +1,50 @@
+{
+  "realm": "workshop",
+  "enabled": true,
+  "users": [
+    {
+      "username": "user1",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password1"
+        }
+      ],
+      "email": "user1@workshop.de",
+      "firstName": "user1",
+      "lastName": "user1",
+      "emailVerified": true
+    },
+    {
+      "username": "user2",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password2"
+        }
+      ],
+      "email": "user2@workshop.de",
+      "firstName": "user2",
+      "lastName": "user2",
+      "emailVerified": true
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "workshop-client",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "my-client-secret",
+      "directAccessGrantsEnabled": true,
+      "publicClient": true,
+      "redirectUris": [
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "*"
+      ]
+    }
+  ]
+}
