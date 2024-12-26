@@ -10,7 +10,7 @@ import {
 import { GameService } from './game.service';
 import { GameState } from './model/game.model';
 import { WrongPlayerFilter } from 'src/wrong-player/wrong-player.filter';
-import { JwtAuthGuard } from '@5stones/nest-oidc';
+import { CurrentUser, JwtAuthGuard } from '@5stones/nest-oidc';
 
 class MoveDTO {
   @IsInt()
@@ -26,21 +26,25 @@ class MoveDTO {
 
 @Controller('game')
 export class GameController {
-  playerId = '0';
   constructor(private gameService: GameService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getActiveGame(): Promise<GameState> {
-    return await this.gameService.getActiveGame(this.playerId);
+  async getActiveGame(@CurrentUser() user: any): Promise<GameState> {
+    return await this.gameService.getActiveGame(
+      user['given_name'] || user['email'],
+    );
   }
 
   @Post('move/user')
   @UseGuards(JwtAuthGuard)
   @UseFilters(WrongPlayerFilter)
-  async moveUser(@Body() moveDto: MoveDTO): Promise<GameState> {
+  async moveUser(
+    @CurrentUser() user: any,
+    @Body() moveDto: MoveDTO,
+  ): Promise<GameState> {
     return await this.gameService.moveUser(
-      this.playerId,
+      user['given_name'] || user['email'],
       moveDto.row * 3 + moveDto.column,
     );
   }
@@ -48,7 +52,9 @@ export class GameController {
   @Post('move/opponent')
   @UseGuards(JwtAuthGuard)
   @UseFilters(WrongPlayerFilter)
-  async moveOpponent(): Promise<GameState> {
-    return await this.gameService.moveOpponent(this.playerId);
+  async moveOpponent(@CurrentUser() user: any): Promise<GameState> {
+    return await this.gameService.moveOpponent(
+      user['given_name'] || user['email'],
+    );
   }
 }
