@@ -29,7 +29,7 @@ export class GameService {
     this.gameUtilService.placeTurn(gameState, index, 'X');
 
     if (gameState.finished) {
-      this.notifyAboutEndingGame(playerId, gameState.winner);
+      this.notifyAboutEndingGame(playerId, gameState.winner, gameState.board);
     }
 
     return await this.gameUtilService.updateGameState(gameState, playerId);
@@ -48,7 +48,7 @@ export class GameService {
     this.gameUtilService.placeTurn(gameState, bestIndex, 'O');
 
     if (gameState.finished) {
-      this.notifyAboutEndingGame(playerId, gameState.winner);
+      this.notifyAboutEndingGame(playerId, gameState.winner, gameState.board);
     }
 
     return await this.gameUtilService.updateGameState(gameState, playerId);
@@ -57,12 +57,14 @@ export class GameService {
   async notifyAboutEndingGame(
     playerId: string,
     winningSign: string | null,
+    board: string[],
   ): Promise<void> {
     await this.sqsService.send('workshop-test-queue', {
       id: uuidv4(),
       body: {
         playerId: playerId,
         winner: winningSign,
+        board: board,
       },
     });
   }
