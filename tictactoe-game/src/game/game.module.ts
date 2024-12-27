@@ -28,6 +28,6 @@ import { SQS } from '@aws-sdk/client-sqs';
       },
     },
   ],
-  exports: [SQS]
+  exports: [SQS],
 })
 export class GameModule {}

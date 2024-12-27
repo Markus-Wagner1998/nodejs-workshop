@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GameModule } from './game/game.module';
-import { OpponentService } from './game/opponent/opponent.service';
-import { GameUtilService } from './game/game-util/game-util.service';
 import { SqsModule } from '@ssut/nestjs-sqs';
 import { AuthModule } from '@5stones/nest-oidc';
 
@@ -25,6 +23,6 @@ import { AuthModule } from '@5stones/nest-oidc';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, OpponentService, GameUtilService],
+  providers: [AppService],
 })
 export class AppModule {}
