@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { GameModule } from './game/game.module';
 import { SqsModule } from '@ssut/nestjs-sqs';
 import { AuthModule } from '@5stones/nest-oidc';
@@ -22,7 +20,7 @@ import { AuthModule } from '@5stones/nest-oidc';
       ],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
