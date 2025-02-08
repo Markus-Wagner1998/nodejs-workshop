@@ -1,0 +1,13 @@
+<div class="grid-3-3">
+  @for (cell of board(); track $index) {
+    @if (cell !== '') {
+      <div class="cell cell-filled">
+        <p>{{cell}}</p>
+      </div>
+    } @else {
+      <div class="cell cell-empty" (click)="clickCell($index)">
+        <p>{{cell}}</p>
+      </div>
+    }
+  }
+</div>
