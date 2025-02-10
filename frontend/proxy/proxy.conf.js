@@ -9,6 +9,27 @@ const PROXY_CONFIG = [
             proxyReq.setHeader('webpass-remote-user','TOTO_USER');
         },
     },
+    {
+        context: [
+            "/combinations/**"
+        ],
+        "target": "http://localhost:3001/",
+        "secure": false,
+        onProxyReq: (proxyReq) => {
+            proxyReq.setHeader('webpass-remote-user','TOTO_USER');
+        },
+    },
+    {
+        context: [
+            "/.well-known/**",
+            "/realms/**"
+        ],
+        "target": "http://localhost:8999/",
+        "secure": false,
+        onProxyReq: (proxyReq) => {
+            proxyReq.setHeader('webpass-remote-user','TOTO_USER');
+        },
+    },
 ];
 
 module.exports = PROXY_CONFIG;
