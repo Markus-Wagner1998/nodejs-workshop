@@ -1,5 +1,8 @@
 <button (click)="login()">Login</button>
 <button (click)="logout()">Logout</button>
+@if (gameFinished) {
+  <button (click)="restart()">Restart</button>
+}
 <div class="grid-3-3">
   @for (cell of board(); track $index) {
     @if (cell !== '') {
@@ -7,7 +10,7 @@
         <p>{{cell}}</p>
       </div>
     } @else {
-      <div class="cell cell-empty" (click)="clickCell($index)">
+      <div class="cell cell-empty" [ngClass]="getClickableClass()" (click)="clickCell($index)">
         <p>{{cell}}</p>
       </div>
     }

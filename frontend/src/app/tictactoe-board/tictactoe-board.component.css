@@ -7,7 +7,7 @@
   aspect-ratio: 1 / 1;
 }
 
-.cell:hover {
+.clickable-cell:hover {
   background-color: grey;
 }
 
