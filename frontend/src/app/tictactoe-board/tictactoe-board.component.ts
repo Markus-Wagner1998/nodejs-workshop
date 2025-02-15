@@ -129,6 +129,7 @@ export class TictactoeBoardComponent implements OnInit {
         this.board.update(() => res.board);
         if (res.finished) {
           this.snackBar.open('You lost!');
+          this.gameFinished = true;
         }
       });
   }
