@@ -1,18 +1,44 @@
-<button (click)="login()">Login</button>
-<button (click)="logout()">Logout</button>
-@if (gameFinished) {
-  <button (click)="restart()">Restart</button>
-}
-<div class="grid-3-3">
-  @for (cell of board(); track $index) {
-    @if (cell !== '') {
-      <div class="cell cell-filled">
-        <p>{{cell}}</p>
-      </div>
-    } @else {
-      <div class="cell cell-empty" [ngClass]="getClickableClass()" (click)="clickCell($index)">
-        <p>{{cell}}</p>
-      </div>
-    }
-  }
-</div>
+  <div style="display: flex; justify-content: center">
+    <mat-card appearance="raised" class="game-card">
+      @if (isLoggedIn()) {
+        <mat-card-header class="card-header">
+          <mat-card-title class="card-header-title">
+            <p>Play a Game</p>
+            <div style="display: flex; align-items: center">
+              <button mat-flat-button (click)="logout()">Logout</button>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+      }
+      <mat-card-content class="game-card-content">
+        @if (isLoggedIn()) {
+          <div class="grid-3-3">
+            @for (cell of board(); track $index) {
+              @if (cell !== "") {
+                <div class="cell cell-filled">
+                  <p>{{ cell }}</p>
+                </div>
+              } @else {
+                <div
+                  class="cell cell-empty"
+                  [ngClass]="getClickableClass()"
+                  (click)="clickCell($index)"
+                >
+                  <p>{{ cell }}</p>
+                </div>
+              }
+            }
+          </div>
+          } @else {
+          <div style="height: 100%; display: flex; justify-content: center; align-items:center">
+            <button mat-flat-button (click)="login()">Login</button>
+          </div>
+          }
+      </mat-card-content>
+      <mat-card-actions>
+        @if (gameFinished) {
+          <button mat-flat-button (click)="reset()">Restart</button>
+        }
+      </mat-card-actions>
+    </mat-card>
+  </div>

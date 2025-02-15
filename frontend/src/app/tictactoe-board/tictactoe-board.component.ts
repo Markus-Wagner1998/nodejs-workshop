@@ -3,8 +3,6 @@ import {
   input,
   InputSignal,
   OnInit,
-  output,
-  OutputEmitterRef,
   signal,
 } from '@angular/core';
 import { GameService } from '../../../generated/openapi-client';
@@ -12,19 +10,25 @@ import { RouterModule } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../auth/auth.config';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tictactoe-board',
-  imports: [RouterModule, CommonModule],
+  imports: [
+    RouterModule,
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatSnackBarModule
+  ],
   templateUrl: './tictactoe-board.component.html',
   styleUrl: './tictactoe-board.component.css',
 })
 export class TictactoeBoardComponent implements OnInit {
   boardInput: InputSignal<string[]> = input(Array(9).fill(''));
   editableInput: InputSignal<boolean> = input(true);
-
-  onUserWin: OutputEmitterRef<void> = output();
-  onOpponentWin: OutputEmitterRef<void> = output();
 
   board = signal(this.boardInput());
   editable = signal(this.editableInput());
@@ -34,13 +38,19 @@ export class TictactoeBoardComponent implements OnInit {
   constructor(
     private gameService: GameService,
     private oauthservice: OAuthService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
-    const jwtToken = this.oauthservice.getAccessToken();
-    if (jwtToken) {
-      this.getGameStateFromServer(this.getAccessToken());
-    }
+    this.oauthservice.configure(authConfig);
+    const url = `${authConfig.issuer}/.well-known/openid-configuration`;
+    this.oauthservice.loadDiscoveryDocument(url).then(() => {
+      this.oauthservice.tryLogin({});
+      const jwtToken = this.oauthservice.getAccessToken();
+      if (jwtToken) {
+        this.getGameStateFromServer(this.getAccessToken());
+      }
+    });
   }
 
   getClickableClass(): string[] {
@@ -66,7 +76,7 @@ export class TictactoeBoardComponent implements OnInit {
     observableGameState.subscribe((res) => {
       this.board.update(() => res.board);
       if (res.finished) {
-        this.onUserWin.emit();
+        this.snackBar.open('You won!');
         this.gameFinished = true;
         return;
       }
@@ -76,19 +86,28 @@ export class TictactoeBoardComponent implements OnInit {
     });
   }
 
-  restart() {
+  reset() {
     this.board.update(() => Array(9).fill(''));
     this.gameFinished = false;
   }
 
   login() {
-    this.oauthservice.configure(authConfig);
-    this.oauthservice.loadDiscoveryDocumentAndTryLogin();
-    this.oauthservice.initCodeFlow();
+    if (!this.isLoggedIn()) {
+      this.oauthservice.configure(authConfig);
+      this.oauthservice.loadDiscoveryDocumentAndTryLogin();
+      this.oauthservice.initCodeFlow();
+    }
   }
 
   logout() {
-    this.oauthservice.logOut(true);
+    if (this.isLoggedIn()) {
+      this.oauthservice.logOut(true);
+      this.reset();
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return this.oauthservice.hasValidAccessToken();
   }
 
   private getGameStateFromServer(accessToken: string): void {
@@ -109,7 +128,7 @@ export class TictactoeBoardComponent implements OnInit {
       .subscribe((res) => {
         this.board.update(() => res.board);
         if (res.finished) {
-          this.onUserWin.emit();
+          this.snackBar.open('You lost!');
         }
       });
   }

@@ -1,9 +1,33 @@
+.card-header {
+  width: 100%;
+}
+
+.card-header-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-card {
+  height: 700px;
+  width: 500px;
+  min-width: 500px;
+  background-color: #b3f6ff;
+}
+
+.game-card-content {
+  height: 100%;
+}
+
 .grid-3-3 {
+  width: 100%;
+  aspect-ratio: 1 / 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
 
 .cell {
+  height: 150px;
+  width: 150px;
   aspect-ratio: 1 / 1;
 }
 
