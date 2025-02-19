@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "openapi:generate": "rm -r ../frontend/generated/openapi-client && openapi-generator-cli generate"
+    "openapi:generate": "mkdir -p ../frontend/generated/openapi-client/tictactoe && rm -r ../frontend/generated/openapi-client/tictactoe && openapi-generator-cli generate"
   },
   "dependencies": {
     "@5stones/nest-oidc": "^2.0.1",

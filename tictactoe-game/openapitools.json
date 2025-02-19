@@ -6,7 +6,7 @@
     "generators": { 
       "typescript": { 
         "generatorName": "typescript-angular",
-        "output": "../frontend/generated/openapi-client",
+        "output": "../frontend/generated/openapi-client/tictactoe",
         "glob": "apidoc.json",
         "additionalProperties": {
           "enumPropertyNaming": "UPPERCASE",
