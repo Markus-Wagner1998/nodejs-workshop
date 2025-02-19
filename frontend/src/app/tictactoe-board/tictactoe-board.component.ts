@@ -1,27 +1,21 @@
 import {
   Component,
+  effect,
   input,
   InputSignal,
   OnInit,
+  output,
+  OutputEmitterRef,
   signal,
+  WritableSignal,
 } from '@angular/core';
-import { GameService } from '../../../generated/openapi-client';
-import { RouterModule } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { authConfig } from '../auth/auth.config';
+import { GameService } from '../../../generated/openapi-client/tictactoe';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tictactoe-board',
   imports: [
-    RouterModule,
     CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatSnackBarModule
   ],
   templateUrl: './tictactoe-board.component.html',
   styleUrl: './tictactoe-board.component.css',
@@ -29,28 +23,34 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class TictactoeBoardComponent implements OnInit {
   boardInput: InputSignal<string[]> = input(Array(9).fill(''));
   editableInput: InputSignal<boolean> = input(true);
+  accessTokenInput: InputSignal<string> = input('');
+  resetGameInput: InputSignal<number> = input(0);
 
-  board = signal(this.boardInput());
+  userWon: OutputEmitterRef<void> = output();
+  opponentWon: OutputEmitterRef<void> = output();
+
+  board: WritableSignal<string[]> = signal(this.boardInput());
   editable = signal(this.editableInput());
 
-  gameFinished = false;
 
   constructor(
     private gameService: GameService,
-    private oauthservice: OAuthService,
-    private snackBar: MatSnackBar,
-  ) {}
+  ) {
+    effect(() => {
+      if (this.resetGameInput()) {
+        this.reset()
+      }
+    })
+  }
 
   ngOnInit(): void {
-    this.oauthservice.configure(authConfig);
-    const url = `${authConfig.issuer}/.well-known/openid-configuration`;
-    this.oauthservice.loadDiscoveryDocument(url).then(() => {
-      this.oauthservice.tryLogin({});
-      const jwtToken = this.oauthservice.getAccessToken();
-      if (jwtToken) {
-        this.getGameStateFromServer(this.getAccessToken());
-      }
-    });
+    this.board = signal(this.boardInput());
+    this.editable = signal(this.editableInput());
+
+    const accessToken = this.accessTokenInput();
+    if (accessToken) {
+      this.getGameStateFromServer(accessToken);
+    }
   }
 
   getClickableClass(): string[] {
@@ -64,50 +64,33 @@ export class TictactoeBoardComponent implements OnInit {
     if (!this.editable() || !this.isUsersTurn()) {
       return;
     }
-    const accessToken = this.getAccessToken();
     const observableGameState = this.gameService.gameControllerMoveUser(
       {
         row: Math.floor(cellIndex / 3),
         column: cellIndex % 3,
       },
-      accessToken,
+      this.accessTokenInput(),
     );
 
     observableGameState.subscribe((res) => {
       this.board.update(() => res.board);
       if (res.finished) {
-        this.snackBar.open('You won!');
-        this.gameFinished = true;
+        this.userWon.emit();
         return;
       }
       new Promise((r) => setTimeout(r, 1500)).then(() => {
-        this.getGameStateFromServer(accessToken);
+        this.getGameStateFromServer(this.accessTokenInput());
       });
     });
   }
 
   reset() {
     this.board.update(() => Array(9).fill(''));
-    this.gameFinished = false;
-  }
-
-  login() {
-    if (!this.isLoggedIn()) {
-      this.oauthservice.configure(authConfig);
-      this.oauthservice.loadDiscoveryDocumentAndTryLogin();
-      this.oauthservice.initCodeFlow();
-    }
-  }
-
-  logout() {
-    if (this.isLoggedIn()) {
-      this.oauthservice.logOut(true);
-      this.reset();
-    }
   }
 
   isLoggedIn(): boolean {
-    return this.oauthservice.hasValidAccessToken();
+    const accessToken = this.accessTokenInput().trim();
+    return accessToken !== '' && accessToken !== 'Bearer';
   }
 
   private getGameStateFromServer(accessToken: string): void {
@@ -128,8 +111,7 @@ export class TictactoeBoardComponent implements OnInit {
       .subscribe((res) => {
         this.board.update(() => res.board);
         if (res.finished) {
-          this.snackBar.open('You lost!');
-          this.gameFinished = true;
+          this.opponentWon.emit();
         }
       });
   }
@@ -139,9 +121,5 @@ export class TictactoeBoardComponent implements OnInit {
       this.board().filter((cell) => cell === 'X').length ===
       this.board().filter((cell) => cell === 'O').length
     );
-  }
-
-  private getAccessToken(): string {
-    return `Bearer ${this.oauthservice.getAccessToken()}`;
   }
 }

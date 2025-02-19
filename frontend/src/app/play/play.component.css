@@ -8,11 +8,10 @@
 }
 
 .game-card {
-  height: 600px;
+  height: 700px;
   width: 500px;
   min-width: 500px;
   background-color: #b3f6ff;
-  margin: 20px;
 }
 
 .game-card-content {
