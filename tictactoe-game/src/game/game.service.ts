@@ -1,71 +1,37 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { GameUtilService } from 'src/game/game-util/game-util.service';
-import { OpponentService } from 'src/game/opponent/opponent.service';
 import { GameState } from './model/game.model';
-import { SqsService } from '@ssut/nestjs-sqs';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GameService {
-  constructor(
-    private gameUtilService: GameUtilService,
-    private opponentService: OpponentService,
-    private readonly sqsService: SqsService,
-  ) {}
+    constructor(
+        private gameUtilService: GameUtilService
+    ) { }
 
-  async getActiveGame(playerId: string): Promise<GameState> {
-    const gameState = await this.gameUtilService.loadActiveGameState(playerId);
-    if (!gameState) {
-      throw new NotFoundException('No active game found');
-    }
-    return gameState;
-  }
-
-  async moveUser(playerId: string, index: number): Promise<GameState> {
-    let gameState = await this.gameUtilService.loadActiveGameState(playerId);
-    if (!gameState) {
-      gameState = await this.gameUtilService.storeNewGameState(playerId);
-    }
-    this.gameUtilService.placeTurn(gameState, index, 'X');
-
-    if (gameState.finished) {
-      this.notifyAboutEndingGame(playerId, gameState.winner, gameState.board);
+    async getActiveGame(playerId: string): Promise<GameState> {
+        const gameState = await this.gameUtilService.loadActiveGameState(playerId);
+        if (!gameState) {
+            throw new NotFoundException('No active game found');
+        }
+        return gameState;
     }
 
-    return await this.gameUtilService.updateGameState(gameState, playerId);
-  }
-
-  async moveOpponent(playerId: string): Promise<GameState> {
-    let gameState = await this.gameUtilService.loadActiveGameState(playerId);
-    if (!gameState) {
-      gameState = await this.gameUtilService.storeNewGameState(playerId);
+    async moveUser(playerId: string, index: number): Promise<GameState> {
+        //TODO: Implement move user functionality
+        //Load active game state
+        //If no game state exists store an initial one
+        //Perform the move
+        //Update the game state in the database
+        return null;
     }
 
-    const bestIndex: number = this.opponentService.getBestMoveIndex(
-      gameState.board,
-    );
-
-    this.gameUtilService.placeTurn(gameState, bestIndex, 'O');
-
-    if (gameState.finished) {
-      this.notifyAboutEndingGame(playerId, gameState.winner, gameState.board);
+    async moveOpponent(playerId: string): Promise<GameState> {
+        //TODO: Implement move opponent functionality
+        //Load active game state
+        //If no game state exists store an initial one
+        //Calculate the best move for the opponent
+        //Perform the move
+        //Update the game state in the database
+        return null;
     }
-
-    return await this.gameUtilService.updateGameState(gameState, playerId);
-  }
-
-  async notifyAboutEndingGame(
-    playerId: string,
-    winningSign: string | null,
-    board: string[],
-  ): Promise<void> {
-    await this.sqsService.send('workshop-test-queue', {
-      id: uuidv4(),
-      body: {
-        playerId: playerId,
-        winner: winningSign,
-        board: board,
-      },
-    });
-  }
 }

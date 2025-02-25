@@ -1,35 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GameState {
-  @ApiProperty({
-    description: 'ID of the Game',
-  })
   public id: string;
-  @ApiProperty({
-    description: "Current Player's identifier",
-  })
   public playerId: string;
-  @ApiProperty({
-    minLength: 9,
-    maxLength: 9,
-    isArray: true,
-    type: 'string',
-    description: 'Board stored as flat array',
-  })
   public board: CellValue[];
-  @ApiProperty({
-    description: 'Current Turn index',
-    minimum: 0,
-    maximum: 8,
-  })
   public turn: number;
-  @ApiProperty({
-    description: 'Information whether the game is finished',
-  })
   public finished: boolean;
-  @ApiProperty({
-    description: 'ID of the winner. Null if no winner exists',
-  })
   public winner: string | null;
 
   constructor(
