@@ -59,13 +59,6 @@ export class GameService {
     winningSign: string | null,
     board: string[],
   ): Promise<void> {
-    await this.sqsService.send('workshop-test-queue', {
-      id: uuidv4(),
-      body: {
-        playerId: playerId,
-        winner: winningSign,
-        board: board,
-      },
-    });
+        //TODO: Implement sending a message to the SQS queue
   }
 }
