@@ -1,48 +1,16 @@
-import { IsInt, Max, Min } from '@nestjs/class-validator';
 import {
   Body,
   Controller,
   Get,
   Post,
   UseFilters,
-  UseGuards,
 } from '@nestjs/common';
 import { GameService } from './game.service';
 import { GameState } from './model/game.model';
 import { WrongPlayerFilter } from 'src/wrong-player/wrong-player.filter';
-import { CurrentUser, JwtAuthGuard } from '@5stones/nest-oidc';
-import {
-  ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiHeader,
-  ApiOkResponse,
-  ApiProperty,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
 
 class MoveDTO {
-  @IsInt()
-  @Min(0)
-  @Max(2)
-  @ApiProperty({
-    description: 'Row to put the Move',
-    type: 'number',
-    required: true,
-    minimum: 0,
-    maximum: 2,
-  })
   row: number;
-
-  @IsInt()
-  @Min(0)
-  @Max(2)
-  @ApiProperty({
-    description: 'Column to put the Move',
-    type: 'number',
-    required: true,
-    minimum: 0,
-    maximum: 2,
-  })
   column: number;
 }
 
@@ -51,64 +19,28 @@ export class GameController {
   constructor(private gameService: GameService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'JWT Token for Authorization',
-  })
-  @ApiBearerAuth()
-  @ApiOkResponse({
-    description: 'The board state of the current Game',
-    type: GameState,
-  })
-  @ApiUnauthorizedResponse({ description: 'No valid JWT Token provided' })
-  async getActiveGame(@CurrentUser() user: any): Promise<GameState> {
+  async getActiveGame(): Promise<GameState> {
     return await this.gameService.getActiveGame(
-      user['given_name'] || user['email'],
+            'playerId'
     );
   }
 
   @Post('move/user')
-  @UseGuards(JwtAuthGuard)
   @UseFilters(WrongPlayerFilter)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'JWT Token for Authorization',
-  })
-  @ApiBearerAuth()
-  @ApiOkResponse({
-    description: 'The board state after the move',
-    type: GameState,
-  })
-  @ApiBadRequestResponse({ description: 'Invalid Field was selected' })
-  @ApiUnauthorizedResponse({ description: 'No valid JWT Token provided' })
   async moveUser(
-    @CurrentUser() user: any,
     @Body() moveDto: MoveDTO,
   ): Promise<GameState> {
     return await this.gameService.moveUser(
-      user['given_name'] || user['email'],
+            'playerId',
       moveDto.row * 3 + moveDto.column,
     );
   }
 
   @Post('move/opponent')
-  @UseGuards(JwtAuthGuard)
   @UseFilters(WrongPlayerFilter)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'JWT Token for Authorization',
-  })
-  @ApiBearerAuth()
-  @ApiOkResponse({
-    description: 'The board state after the move',
-    type: GameState,
-  })
-  @ApiBadRequestResponse({ description: 'Invalid Field was selected' })
-  @ApiUnauthorizedResponse({ description: 'No valid JWT Token provided' })
-  async moveOpponent(@CurrentUser() user: any): Promise<GameState> {
+  async moveOpponent(): Promise<GameState> {
     return await this.gameService.moveOpponent(
-      user['given_name'] || user['email'],
+            'playerId',
     );
   }
 }
