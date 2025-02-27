@@ -23,7 +23,7 @@ Therefore perform the following steps:
             - Either User Input
             - Or Computer-Calculated Move
         - Update Game State in the Database
-    - There are many methods or skeletons in `game-util.service.ts` which can be used here
+    - There are many methods or skeletons in `game-util.service.ts` and `opponent.service.ts` which can be used here
 - Create DB Access Layer in `game-util.service.ts`
     - Find the first non-finished game for a given playerId
     - Update an existing game state
