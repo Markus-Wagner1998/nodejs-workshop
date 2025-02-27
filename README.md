@@ -29,6 +29,7 @@ Therefore perform the following steps:
     - Username: root
     - Password: example
     - Connection-String: mongodb://root:example@localhost:27017/?authSource=admin
+  - Create a database `workshop` and a collection `test`.
 - Test Keycloak
   - Open Browser and navigate to `http://localhost:8999`
   - Login with `admin` / `admin`
