@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "ba97bc34-57d5-4d67-ac34-e92b0bf2c9b0",
+		"name": "Task1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4552323"
+	},
+	"item": [
+		{
+			"name": "Move User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"row\": 1,\n    \"column\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/game/move/user",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"game",
+						"move",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Move Opponent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/game/move/opponent",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"game",
+						"move",
+						"opponent"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
