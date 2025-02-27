@@ -1,28 +1,31 @@
-# Node.JS and NestJS Workshop
+# Task-1
 
-## Workshop Goals
-For our workshop we want to develop a small example application where we can play tic-tac-toe in the browser.
-There will be two different services in the backend, one for playing a game of Tic Tac Toe and one for showing a LeaderBoard to see which combinations result most ofen in a win.
+This task is designed to get to know with the basics of NestJS. Create a basic Controller, Service and Database Layer. Implement some functionality and be able to play first games using the REST endpoints.
 
-Technologies used:
-* All Backend Services will be using NestJS as Framework on top of Typescript
-* The Frontend Application will be using Angular v19 using new Syntax and using Signals being completely without Zone.JS.
-* For ORM we use Prisma for both applications, but connect it with
-    * PostgreSQL DB for the lederboard service
-    * MongoDB for the game playing service
+Therefore perform the following steps:
 
-## Prerequisites
-There are some prerequisites that need to be fulfilled in order to be able to follow the upcoming steps and to be able to install and run all of the components mentioned.
-
-* Docker (Compose)
-* Angular 18
-* nest.js 10
-* node v20
-* Prisma.IO
-* SQS (localstack)
-* MongoDB
-* PostgreSQL
-* VSCode with following Plugins
-    * Prisma
-    * Prettier
-
+- Navigate into `tictactoe-game`
+    - Run `npm install`
+- Create `.env` file
+    - DATABASE_URL=mongodb://root:example@localhost:27017/worksshop?authSource=admin
+- Create the Database
+    - `npx prisma db push`  to create the database
+    - `npx prisma generate`  to create the prisma client files
+- Create Controller methods in `game.controller.ts`
+    - Endpoint which takes a `MoveDTO`  and performs the move of the User
+    - Endpoint which performs a User of the Computer-AI opponent
+    - Postman Collection in repo
+- Create Service methods in `game.service.ts`
+    - Both Methods follow this principle:
+        - Load active game for user (user is a hardcoded id here)
+        - If no Game exists, store an empty board in the database
+        - Place a Turn
+            - Either User Input
+            - Or Computer-Calculated Move
+        - Update Game State in the Database
+    - There are many methods or skeletons in `game-util.service.ts` which can be used here
+- Create DB Access Layer in `game-util.service.ts`
+    - Find the first non-finished game for a given playerId
+    - Update an existing game state
+    - Store a new Game State
+- Play some games until everyone is finished
