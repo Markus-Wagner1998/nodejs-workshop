@@ -1,28 +1,46 @@
-# Node.JS and NestJS Workshop
+# Task 0
 
-## Workshop Goals
-For our workshop we want to develop a small example application where we can play tic-tac-toe in the browser.
-There will be two different services in the backend, one for playing a game of Tic Tac Toe and one for showing a LeaderBoard to see which combinations result most ofen in a win.
+Task-0 is designed to evaluate that your local setup is working, all containers are running as intended and we can all start with a working local setup.
 
-Technologies used:
-* All Backend Services will be using NestJS as Framework on top of Typescript
-* The Frontend Application will be using Angular v19 using new Syntax and using Signals being completely without Zone.JS.
-* For ORM we use Prisma for both applications, but connect it with
-    * PostgreSQL DB for the lederboard service
-    * MongoDB for the game playing service
+Therefore perform the following steps:
 
-## Prerequisites
-There are some prerequisites that need to be fulfilled in order to be able to follow the upcoming steps and to be able to install and run all of the components mentioned.
-
-* Docker (Compose)
-* Angular 18
-* nest.js 10
-* node v20
-* Prisma.IO
-* SQS (localstack)
-* MongoDB
-* PostgreSQL
-* VSCode with following Plugins
-    * Prisma
-    * Prettier
+- Start the docker containers
+  - Navigate into `workshop-localsetup`
+  - Run `docker-compose -f docker-compose.yml up -d`
+  - Check that following containers are running:
+    - mongodb
+    - postgres
+    - keycloak
+    - localstack
+- Test Postgres Connection
+  - Open DB Client
+  - Connect to Postgres
+    - Host: localhost
+    - Port: 5432
+    - Database: workshop
+    - User: admin
+    - Password: admin
+- Test MongoDB Connection
+  - Open MongoDB Compass
+  - Connect to MongoDB
+    - Hostname: localhost
+    - Port: 27017
+    - Authentication: Username / Password
+    - Username: root
+    - Password: example
+    - Connection-String: mongodb://root:example@localhost:27017/?authSource=admin
+- Test Keycloak
+  - Open Browser and navigate to `http://localhost:8999`
+  - Login with `admin` / `admin`
+  - Check that the realm `workshop` is available
+  - Check that the client `workshop-client` is available
+  - Check that the client `frontend-client` is available
+- Test Localstack
+  - Check if there is a mount error (happen sometimes on windows)
+    - If so, open a shell on the container `docker exec -it workshop-localstack-1 sh` dn run the content of `script.sh` on the container.
+  - If no aws profile is configured, run `aws configure`. (No need to enter real credentials)
+  - List queues and check that the there is one queue available: `aws --endpoint-url=http://localhost:4566 sqs list-queues`
+  - Send a Test message into the queue: `aws --endpoint-url=http://localhost:4566 sqs send-message --queue-url "http://sqs.eu-central-1.localhost.localstack.cloud:4566/000000000000/workshop-test-queue" --message-body "This is my demo test message"`
+  - Read the just sent message from the queue: `aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url "http://sqs.eu-central-1.localhost.localstack.cloud:4566/000000000000/workshop-test-queue"`
+  - Read again and expect an empty result, because the queue should be empty now
 
