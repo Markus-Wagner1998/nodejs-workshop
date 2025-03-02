@@ -10,5 +10,3 @@ In this task we want to setup our frontend to be able to play games. Therefore w
 - Implement `play.component.html`
     - Add a Login Button, if the user is currently not logged in
     - Add a Logout Button, if the user is currently logged in
-    - Show the current Game if the user is currently logged in
-    - Show a reset Button, if the current game is finished
