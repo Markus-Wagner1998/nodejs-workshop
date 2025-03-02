@@ -64,8 +64,9 @@ export class TictactoeBoardComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    const accessToken = this.accessTokenInput().trim();
-    return accessToken !== '' && accessToken !== 'Bearer';
+    // const accessToken = this.accessTokenInput().trim();
+    // return accessToken !== '' && accessToken !== 'Bearer';
+    return false;
   }
 
   private getGameStateFromServer(accessToken: string): void {
@@ -86,7 +87,7 @@ export class TictactoeBoardComponent implements OnInit {
       .subscribe((res) => {
         this.board.update(() => res.board);
         if (res.finished) {
-          this.opponentWon.emit();
+          // this.opponentWon.emit();
         }
       });
   }
