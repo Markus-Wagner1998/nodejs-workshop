@@ -7,9 +7,12 @@ Therefore we need to do these steps:
     - Add a grid of 3x3 for playing tictactoe
     - Add Click Functionality to the Board
 - Add the tictactoe-board component to `play.component.html`
-    - Implement parameter passing
     - Implement Login, Logout, Reset
 - Implement the Game Board Logic in `tictactoe-board.component.ts`
-    - React to a ResetGame Input
-    - Fetch Access Token and Load Gamestate from Server
-    - Implement Click Logic for the Board
+    - Add missing input for access token to and pass it from `play.component.html`
+    - Use Access Token Input to Load Gamestate from Server
+      - if it's the AI Component's turn, perform the move
+    - Implement `clickCell` method by:
+      - Perform API call to perform user action
+      - Wait 1,5s and perform AI move
+      - React to reset game input in the constructor and reset the game.
