@@ -27,5 +27,4 @@ Therefore perform the following steps:
 - Create DB Access Layer in `game-util.service.ts`
     - Find the first non-finished game for a given playerId
     - Update an existing game state
-    - Store a new Game State
 - Play some games until everyone is finished
