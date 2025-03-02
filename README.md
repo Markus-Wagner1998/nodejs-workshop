@@ -16,3 +16,4 @@ Therefore we need to do these steps:
       - Perform API call to perform user action
       - Wait 1,5s and perform AI move
       - React to reset game input in the constructor and reset the game.
+      - React to userWon and opponentWon outputs
