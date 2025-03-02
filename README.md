@@ -1,28 +1,19 @@
-# Node.JS and NestJS Workshop
+# Task 4
 
-## Workshop Goals
-For our workshop we want to develop a small example application where we can play tic-tac-toe in the browser.
-There will be two different services in the backend, one for playing a game of Tic Tac Toe and one for showing a LeaderBoard to see which combinations result most ofen in a win.
+In this Task we will prepare the API to handle Errors and to be available for our future Frontend Application. We will go through three different steps here:
 
-Technologies used:
-* All Backend Services will be using NestJS as Framework on top of Typescript
-* The Frontend Application will be using Angular v19 using new Syntax and using Signals being completely without Zone.JS.
-* For ORM we use Prisma for both applications, but connect it with
-    * PostgreSQL DB for the lederboard service
-    * MongoDB for the game playing service
-
-## Prerequisites
-There are some prerequisites that need to be fulfilled in order to be able to follow the upcoming steps and to be able to install and run all of the components mentioned.
-
-* Docker (Compose)
-* Angular 18
-* nest.js 10
-* node v20
-* Prisma.IO
-* SQS (localstack)
-* MongoDB
-* PostgreSQL
-* VSCode with following Plugins
-    * Prisma
-    * Prettier
-
+- OpenAPI:
+    - Check that `@nestjs/swagger` is part of the dependencies
+    - Add the swagger documentation to the application according to https://docs.nestjs.com/openapi/introduction
+        - Create the /api endpoint that shows the OpenApi documentation
+        - Add Type Annotations to Interface Parameters and Return Values
+        - Add Operation Annotations to Controller Methods
+    - Check that documentation is shown correctly
+    - Try generating client code by using: `npm run openapi:generate`
+- Validation
+    - Add basic validation to `MoveDTO` according to https://docs.nestjs.com/techniques/validation
+- Exception Handling
+    - In `game-util.service.ts`you find the custom exception `WrongPlayerException`that is thrown, when the wrong user is performing a move.
+    - Currently this custom exception leads to a `500 Internal Server Error`because it is not handled yet.
+    - Create an Custom Exception Filter like shown here (https://docs.nestjs.com/exception-filters), you can create it manually or try the nest cli (https://docs.nestjs.com/cli/usages#nest-generate).
+    - Attach it to the Controller methods and see the new response
