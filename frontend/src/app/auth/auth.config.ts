@@ -7,7 +7,7 @@ export const authConfig: AuthConfig = {
   requireHttps: false,
 
   // URL of the SPA to redirect the user to after login
-  redirectUri: window.location.origin + "/tictactoe",
+  redirectUri: window.location.origin + "/",
 
   oidc: true,
 
