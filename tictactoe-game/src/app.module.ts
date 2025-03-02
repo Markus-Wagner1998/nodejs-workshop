@@ -1,13 +1,9 @@
 import { Module } from '@nestjs/common';
 import { GameModule } from './game/game.module';
 import { SqsModule } from '@ssut/nestjs-sqs';
-import { AuthModule } from '@5stones/nest-oidc';
 
 @Module({
   imports: [
-    AuthModule.forRoot({
-      oidcAuthority: 'http://localhost:8999/realms/workshop',
-    }),
     GameModule,
     SqsModule.register({
       consumers: [],

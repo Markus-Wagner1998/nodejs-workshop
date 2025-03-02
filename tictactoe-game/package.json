@@ -21,7 +21,6 @@
     "openapi:generate": "mkdir -p ../frontend/generated/openapi-client/tictactoe && rm -r ../frontend/generated/openapi-client/tictactoe && openapi-generator-cli generate"
   },
   "dependencies": {
-    "@5stones/nest-oidc": "^2.0.1",
     "@aws-sdk/client-sqs": "^3.716.0",
     "@nestjs/class-validator": "^0.13.4",
     "@nestjs/common": "^10.0.0",
