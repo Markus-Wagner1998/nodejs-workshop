@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  signal,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -37,11 +36,7 @@ export class PlayComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.oauthservice.configure(authConfig);
-    const url = `${authConfig.issuer}/.well-known/openid-configuration`;
-    this.oauthservice.loadDiscoveryDocument(url).then(() => {
-      this.oauthservice.tryLogin({});
-    });
+    //TODO: Initialize Auth Token if already exists
   }
 
   userWon(): void {
@@ -55,17 +50,11 @@ export class PlayComponent implements OnInit {
   }
 
   login() {
-    if (!this.isLoggedIn()) {
-      this.oauthservice.configure(authConfig);
-      this.oauthservice.loadDiscoveryDocumentAndTryLogin();
-      this.oauthservice.initCodeFlow();
-    }
+    //TODO: Perform Login Flow if not already logged in
   }
 
   logout() {
-    if (this.isLoggedIn()) {
-      this.oauthservice.logOut(true);
-    }
+    //TODO: Logout user if logged in
   }
 
   isLoggedIn(): boolean {

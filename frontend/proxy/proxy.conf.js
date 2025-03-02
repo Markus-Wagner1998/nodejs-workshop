@@ -11,16 +11,6 @@ const PROXY_CONFIG = [
     },
     {
         context: [
-            "/combinations/**"
-        ],
-        "target": "http://localhost:3001/",
-        "secure": false,
-        onProxyReq: (proxyReq) => {
-            proxyReq.setHeader('webpass-remote-user','TOTO_USER');
-        },
-    },
-    {
-        context: [
             "/.well-known/**",
             "/realms/**"
         ],
