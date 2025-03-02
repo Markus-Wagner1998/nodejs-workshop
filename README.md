@@ -13,7 +13,7 @@ Therefore perform the following steps:
     - `npx prisma generate`  to create the prisma client files
 - Create Controller methods in `game.controller.ts`
     - Endpoint which takes a `MoveDTO`  and performs the move of the User
-    - Endpoint which performs a User of the Computer-AI opponent
+    - Endpoint which performs a Move of the Computer-AI opponent
     - Postman Collection in repo
 - Create Service methods in `game.service.ts`
     - Both Methods follow this principle:
