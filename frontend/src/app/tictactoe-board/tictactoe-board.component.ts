@@ -23,11 +23,10 @@ import { CommonModule } from '@angular/common';
 export class TictactoeBoardComponent implements OnInit {
   boardInput: InputSignal<string[]> = input(Array(9).fill(''));
   editableInput: InputSignal<boolean> = input(true);
-  accessTokenInput: InputSignal<string> = input('');
-  resetGameInput: InputSignal<number> = input(0);
+  //TODO: Add missing inputs for accessToken and to reset the Game
 
   userWon: OutputEmitterRef<void> = output();
-  opponentWon: OutputEmitterRef<void> = output();
+  //TODO: Add output if the opponent wins
 
   board: WritableSignal<string[]> = signal(this.boardInput());
   editable = signal(this.editableInput());
@@ -36,21 +35,11 @@ export class TictactoeBoardComponent implements OnInit {
   constructor(
     private gameService: GameService,
   ) {
-    effect(() => {
-      if (this.resetGameInput()) {
-        this.reset()
-      }
-    })
+    //TODO: React to a resetGame Input
   }
 
   ngOnInit(): void {
-    this.board = signal(this.boardInput());
-    this.editable = signal(this.editableInput());
-
-    const accessToken = this.accessTokenInput();
-    if (accessToken) {
-      this.getGameStateFromServer(accessToken);
-    }
+    //TODO: Fetch Access Token and Try to load game from the server
   }
 
   getClickableClass(): string[] {
@@ -64,24 +53,10 @@ export class TictactoeBoardComponent implements OnInit {
     if (!this.editable() || !this.isUsersTurn()) {
       return;
     }
-    const observableGameState = this.gameService.gameControllerMoveUser(
-      {
-        row: Math.floor(cellIndex / 3),
-        column: cellIndex % 3,
-      },
-      this.accessTokenInput(),
-    );
 
-    observableGameState.subscribe((res) => {
-      this.board.update(() => res.board);
-      if (res.finished) {
-        this.userWon.emit();
-        return;
-      }
-      new Promise((r) => setTimeout(r, 1500)).then(() => {
-        this.getGameStateFromServer(this.accessTokenInput());
-      });
-    });
+    //TODO: Implement calling the backend to perform a Move
+    //User move is performed and after 1,5s the opponent move should be triggered
+    //Emit Events if a user has won
   }
 
   reset() {
