@@ -1,28 +1,14 @@
-# Node.JS and NestJS Workshop
+# Task 5
 
-## Workshop Goals
-For our workshop we want to develop a small example application where we can play tic-tac-toe in the browser.
-There will be two different services in the backend, one for playing a game of Tic Tac Toe and one for showing a LeaderBoard to see which combinations result most ofen in a win.
+In this task we want to setup our frontend to be able to play games. Therefore we need to integrate KeyCloak to get authorized for our API Calls. In this task we will:
 
-Technologies used:
-* All Backend Services will be using NestJS as Framework on top of Typescript
-* The Frontend Application will be using Angular v19 using new Syntax and using Signals being completely without Zone.JS.
-* For ORM we use Prisma for both applications, but connect it with
-    * PostgreSQL DB for the lederboard service
-    * MongoDB for the game playing service
-
-## Prerequisites
-There are some prerequisites that need to be fulfilled in order to be able to follow the upcoming steps and to be able to install and run all of the components mentioned.
-
-* Docker (Compose)
-* Angular 18
-* nest.js 10
-* node v20
-* Prisma.IO
-* SQS (localstack)
-* MongoDB
-* PostgreSQL
-* VSCode with following Plugins
-    * Prisma
-    * Prettier
-
+- Implement OIDC Logic in `play.component.ts`according to https://github.com/manfredsteyer/angular-oauth2-oidc/blob/master/README.md?plain=1#L230-L261 Everything you need for this exercise is in the marked block. The other steps are already finished
+    - Initialize the Auth Token in `ngOnInit`
+    - Perform Login at with the `login`method
+    - Perform Logout with the `logout`method
+    - Add Login and Logout Buttons to `play.component.html` to test your implementations
+- Implement `play.component.html`
+    - Add a Login Button, if the user is currently not logged in
+    - Add a Logout Button, if the user is currently logged in
+    - Show the current Game if the user is currently logged in
+    - Show a reset Button, if the current game is finished
