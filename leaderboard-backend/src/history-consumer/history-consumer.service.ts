@@ -5,27 +5,8 @@ import prisma from 'src/db';
 
 @Injectable()
 export class HistoryConsumerService {
-  @SqsMessageHandler('workshop-test-queue', false)
-  public async handleMessage(message: Message): Promise<void> {
-    if (this.isValidMessageObject(message.Body)) {
-      const jsonBody = JSON.parse(message.Body);
-      const boardHash = this.hashCode(JSON.stringify(jsonBody['board']));
-      await prisma.game.create({
-        data: {
-          playerId: jsonBody['playerId'],
-          winner: jsonBody['winner'],
-          board: {
-            connectOrCreate: {
-              create: this.messageBoardToDbBoard(jsonBody['board']),
-              where: {
-                stateHash: boardHash,
-              },
-            },
-          },
-        },
-      });
-    }
-  }
+    //TODO: Implement a message handler for messages in the SQS Queue 'workshop-test-queue'.
+    //Store the content of the message in the database.
 
   private messageBoardToDbBoard(messageBoard: any): any {
     return {
