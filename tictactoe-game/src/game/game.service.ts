@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { GameUtilService } from 'src/game/game-util/game-util.service';
-import { OpponentService } from 'src/game/opponent/opponent.service';
+import { GameUtilService } from './game-util/game-util.service';
+import { OpponentService } from './opponent/opponent.service';
 import { GameState } from './model/game.model';
 import { SqsService } from '@ssut/nestjs-sqs';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,6 +19,10 @@ export class GameService {
       throw new NotFoundException('No active game found');
     }
     return gameState;
+  }
+
+  async deleteActiveGame(playerId: string): Promise<void> {
+    await this.gameUtilService.deleteActiveGameState(playerId);
   }
 
   async moveUser(playerId: string, index: number): Promise<GameState> {

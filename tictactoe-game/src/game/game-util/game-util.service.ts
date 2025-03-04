@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Game } from '@prisma/client';
-import prisma from 'src/db';
+import prisma from '../../db';
 import {
   CellValue,
   GameState,
   PlayerSign,
   winningCombos,
-} from 'src/game/model/game.model';
-import { WrongPlayerException } from 'src/wrong-player/wrong-player.exception';
+} from '../model/game.model';
+import { WrongPlayerException } from '../../wrong-player/wrong-player.exception';
 
 @Injectable()
 export class GameUtilService {
@@ -46,6 +46,17 @@ export class GameUtilService {
       gameState.finished = true;
       gameState.winner = winningSign || null;
     }
+  }
+
+  async deleteActiveGameState(playerId: string): Promise<void> {
+    await prisma.game.deleteMany({
+      where: {
+        AND: {
+          playerId: playerId,
+          finished: false,
+        },
+      },
+    });
   }
 
   async loadActiveGameState(playerId: string): Promise<GameState> {
@@ -113,6 +124,9 @@ export class GameUtilService {
   }
 
   private isPlayerAllowedToMove(playerSign: PlayerSign, turn: number) {
-    return playerSign === 'X' && turn % 2 === 0 || playerSign === 'O' && turn % 2 === 1;
+    return (
+      (playerSign === 'X' && turn % 2 === 0) ||
+      (playerSign === 'O' && turn % 2 === 1)
+    );
   }
 }

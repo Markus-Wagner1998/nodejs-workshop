@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { GameController } from './game.controller';
 import { GameService } from './game.service';
-import { GameUtilService } from 'src/game/game-util/game-util.service';
-import { OpponentService } from 'src/game/opponent/opponent.service';
+import { GameUtilService } from './game-util/game-util.service';
+import { OpponentService } from './opponent/opponent.service';
 import { SQS } from '@aws-sdk/client-sqs';
 
 @Module({

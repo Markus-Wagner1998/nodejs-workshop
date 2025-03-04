@@ -2,19 +2,22 @@ import { IsInt, Max, Min } from '@nestjs/class-validator';
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Post,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { GameService } from './game.service';
 import { GameState } from './model/game.model';
-import { WrongPlayerFilter } from 'src/wrong-player/wrong-player.filter';
+import { WrongPlayerFilter } from '../wrong-player/wrong-player.filter';
 import { CurrentUser, JwtAuthGuard } from '@5stones/nest-oidc';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiHeader,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiProperty,
   ApiUnauthorizedResponse,
@@ -64,6 +67,22 @@ export class GameController {
   @ApiUnauthorizedResponse({ description: 'No valid JWT Token provided' })
   async getActiveGame(@CurrentUser() user: any): Promise<GameState> {
     return await this.gameService.getActiveGame(
+      user['given_name'] || user['email'],
+    );
+  }
+
+  @Delete()
+  @HttpCode(204)
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'JWT Token for Authorization',
+  })
+  @ApiBearerAuth()
+  @ApiNoContentResponse()
+  @ApiUnauthorizedResponse({ description: 'No valid JWT Token provided' })
+  async deleteActiveGame(@CurrentUser() user: any): Promise<void> {
+    await this.gameService.deleteActiveGame(
       user['given_name'] || user['email'],
     );
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { GameUtilService } from 'src/game/game-util/game-util.service';
-import { CellValue } from 'src/game/model/game.model';
+import { GameUtilService } from '../game-util/game-util.service';
+import { CellValue } from '..//model/game.model';
 
 @Injectable()
 export class OpponentService {
