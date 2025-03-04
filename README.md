@@ -1,28 +1,15 @@
-# Node.JS and NestJS Workshop
+# Task 7
 
-## Workshop Goals
-For our workshop we want to develop a small example application where we can play tic-tac-toe in the browser.
-There will be two different services in the backend, one for playing a game of Tic Tac Toe and one for showing a LeaderBoard to see which combinations result most ofen in a win.
+In this task we want to add Tests to our application to ensure functionality.
+We want to add unit tests for a central component `game.service.ts`. Here we will see the concepts of Mocking / Spying in Jest and NestJS.
 
-Technologies used:
-* All Backend Services will be using NestJS as Framework on top of Typescript
-* The Frontend Application will be using Angular v19 using new Syntax and using Signals being completely without Zone.JS.
-* For ORM we use Prisma for both applications, but connect it with
-    * PostgreSQL DB for the lederboard service
-    * MongoDB for the game playing service
+Also we want to test our application from the outside perspective by implementing E2E Tests.
+NestJS directly includes `SuperTest` for this purpose.
 
-## Prerequisites
-There are some prerequisites that need to be fulfilled in order to be able to follow the upcoming steps and to be able to install and run all of the components mentioned.
+Steps:
+- In `game.service.spec.ts` implement some Unit Tests and familiarize with the Conecpts. There are two tests available as a starting point and the test setup is already done.
+- In `game.e2e-spec.ts` implement some E2E Tests. There are two tests available as a starting point and the test setup is already done. Also there are helper methods and the Auth Token is already fetched during initialization.
 
-* Docker (Compose)
-* Angular 18
-* nest.js 10
-* node v20
-* Prisma.IO
-* SQS (localstack)
-* MongoDB
-* PostgreSQL
-* VSCode with following Plugins
-    * Prisma
-    * Prettier
-
+Important Notice:
+- We skip tools like `TestContainers` here for sake of simplicity. The Unit Tests should be runnable without the need of external dependencies.
+- For the E2E Tests it is necessary to have the compose-setup running.
