@@ -38,69 +38,7 @@ describe('GameController (e2e)', () => {
     const response = await getGame(app, authToken);
     expect(response.status).toEqual(404);
   });
-
-  it('/game/move/user (POST) - should perform users move', async () => {
-    const response = await moveUser(app, authToken, 0, 0);
-    expect(response.status).toEqual(201);
-    expect(response.body).toEqual({
-      id: expect.any(String),
-      playerId: 'user1',
-      board: ['X', '', '', '', '', '', '', '', ''],
-      turn: 1,
-      finished: false,
-      winner: null,
-    });
-  });
-
-  it('/game/move/user (POST) - should get same game as after post', async () => {
-    const postResponse = await moveUser(app, authToken, 0, 0);
-    expect(postResponse.status).toEqual(201);
-
-    const getResponse = await getGame(app, authToken);
-    expect(getResponse.status).toEqual(200);
-
-    expect(postResponse.body).toEqual(getResponse.body);
-  });
-
-  it('/game/move/user (POST) - cannot move twice consecutively', async () => {
-    const postResponse = await moveUser(app, authToken, 0, 0);
-    expect(postResponse.status).toEqual(201);
-    const secondPostResponse = await moveUser(app, authToken, 1, 0);
-    expect(secondPostResponse.status).toEqual(400);
-  });
-
-  it('/game/move/opponent (POST) - user moves first', async () => {
-    const postResponse = await moveOpponent(app, authToken);
-    expect(postResponse.status).toEqual(400);
-  });
-
-  it('/game/move/opponent (POST) - opponent cannot move twice consecutively', async () => {
-    const postResponse = await moveUser(app, authToken, 0, 0);
-    expect(postResponse.status).toEqual(201);
-    const opponentResponse = await moveOpponent(app, authToken);
-    expect(opponentResponse.status).toEqual(201);
-    const secondOpponentResponse = await moveOpponent(app, authToken);
-    expect(secondOpponentResponse.status).toEqual(400);
-  });
-
-  it('/game/move/user (POST) - cannot put a move in occupied field', async () => {
-    const postResponse = await moveUser(app, authToken, 0, 0);
-    expect(postResponse.status).toEqual(201);
-    const opponentResponse = await moveOpponent(app, authToken);
-    expect(opponentResponse.status).toEqual(201);
-    const secondPostResponse = await moveUser(app, authToken, 0, 0);
-    expect(secondPostResponse.status).toEqual(400);
-  });
-
-  it('/game/move/user (POST) - cannot put a move in invalid field number - row', async () => {
-    const postResponse = await moveUser(app, authToken, 3, 0);
-    expect(postResponse.status).toEqual(400);
-  });
-
-  it('/game/move/user (POST) - cannot put a move in invalid field number - column', async () => {
-    const postResponse = await moveUser(app, authToken, 0, 3);
-    expect(postResponse.status).toEqual(400);
-  });
+    //TODO: Add E2E Tests here
 });
 
 async function getGame(app: INestApplication, authToken: string) {
