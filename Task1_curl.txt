@@ -1,0 +1,9 @@
+curl --location 'localhost:3000/game/move/user' \
+--header 'Content-Type: application/json' \
+--data '{
+    "row": 1,
+    "column": 0
+}'
+
+
+curl --location --request POST 'localhost:3000/game/move/opponent'
