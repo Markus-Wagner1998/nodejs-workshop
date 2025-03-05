@@ -21,12 +21,7 @@ export class LeaderboardComponent implements OnInit {
   constructor(private combinationsService: CombinationsService) { }
 
   ngOnInit(): void {
-    this.combinationsService.combinationsControllerGetTopCombinations()
-      .subscribe(res => {
-        res.forEach(resEl => {
-          this.winningBoards.set(resEl.board, resEl.score);
-        })
-      });
+    //TODO
   }
 
 }
