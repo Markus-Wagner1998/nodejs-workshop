@@ -5,5 +5,5 @@ In this Task we want to integrate an SQS Queue into our application and send a m
 - Check that `@aws-sdk/client-sqs` and `@ssut/nestjs-sqs` are installed
 - In `app.module.ts` add the Module Configuration with Queue URL
   - For information check https://github.com/ssut/nestjs-sqs
-- In `game-util.service.ts` in `notifyAboutEndingGames(playerId, winningSign, board)`implement message sending to the queue
+- In `game.service.ts` in `notifyAboutEndingGames(playerId, winningSign, board)`implement message sending to the queue
 - Play some games and validate that messages are sent to the queue
